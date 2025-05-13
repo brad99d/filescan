@@ -1,0 +1,20 @@
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+body.landing {
+    background-image: url('../images/background-1.png');
+}
+body.app {
+    background-size: contain;
+    background-image: url('../images/background-2.png');
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px rgb(255, 255, 255) solid;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 30px -10px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+}
