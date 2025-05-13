@@ -1,0 +1,26 @@
+services:
+  db:
+    container_name: database
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+  
+  app:
+    container_name: app
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/database
+
+volumes:
+  postgres_data:
