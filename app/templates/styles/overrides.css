@@ -56,41 +56,46 @@ input[type=text], input[type=password], input[type=email], textarea {
 }
 
 /* Dashboard Cards */
-.card-header .file-icon {
+.detail .file-icon {
 
 }
-.card-header .filename {
+.detail .filename {
 
 }
-.card-header .filesize {
+.detail .filesize {
     opacity: 50%;
 }
-.card-body .result {
+.detail .result {
     display: flex;
     align-items: center;
     margin-bottom: 8px;
 }
-.card-body .result-icon {
+.detail .result-icon {
     font-size: 2rem;
     margin-right: 8px;
 }
-.card-body .clean .result-icon {
+.detail .clean .result-icon {
     color: var(--primary);
 }
-.card-body .detected .result-icon {
+.detail .detected .result-icon {
     color: var(--warning);
 }
-.card-body .result-text {
+.detail .result-text {
     font-size: 1.8rem;
 }
-.card-body .description-text {
+.detail .description-text {
 
 }
-.card-footer .hash {
+.detail .hash {
     opacity: 50%;
 }
-.card-footer .time {
+.detail .time {
     opacity: 50%;
+}
+img.bin-img {
+    image-rendering: pixelated;
+    aspect-ratio: 1/1;
+    width: 100px;
 }
 
 /* Profile Page */

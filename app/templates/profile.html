@@ -11,7 +11,7 @@
   <!-- CSS Overrides -->
   <link href="./styles/overrides.css" rel="stylesheet">
 </head>
-<body class="app" style="height: 200vh">
+<body class="app" style="display: flex; flex-direction: column;">
 <!-- Navigation -->
 <div class="container px-2 py-4">
   <nav class="navbar navbar-expand-sm p-0 m-0">
@@ -37,7 +37,7 @@
   </nav>
 </div>
 <!-- Main Content -->
-<div class="container px-2 mt-5">
+<div class="container px-2 mt-5 flex-grow-1">
   <h1 class="mb-5">Hi, User</h1>
   <div class="row g-3">
     <div class="col-4 sidebar">
@@ -75,6 +75,12 @@
       </div>
     </div>
   </div>
+</div>
+<!-- Footer -->
+<div class="container">
+  <footer class="py-3 mt-4 border-top text-center">
+    <a class="btn-link text-secondary">FileScan is a University Project</a>
+  </footer>
 </div>
 
 <!-- Bootstrap JS -->
