@@ -1,3 +1,12 @@
+:root {
+    --primary: #0D5EFF;
+    --warning: #E2A50D;
+    --secondary: #1F4799;
+}
+html, body {
+    padding: 0;
+    margin: 0;
+}
 body {
     background-size: cover;
     background-repeat: no-repeat;
@@ -7,14 +16,73 @@ body.landing {
     background-image: url('../images/background-1.png');
 }
 body.app {
-    background-size: contain;
     background-image: url('../images/background-2.png');
+    background-size: 100%;
+}
+
+.navbar-brand {
+    font-weight: 900;
+    font-style: italic;
+}
+
+h1 {
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.0;
 }
 
 .card {
     background-color: rgba(255, 255, 255, 0.6);
-    border: 1px rgb(255, 255, 255) solid;
+    border: 1px rgb(200, 200, 200) solid;
     backdrop-filter: blur(12px);
-    box-shadow: 0 2px 30px -10px rgba(0, 0, 0, 0.4);
+    box-shadow:
+            0 2px 20px -10px rgba(0, 0, 0, 0.4),
+            0 -2px 2px 0 rgba(0, 0, 0, 0.1) inset,
+            0 2px 2px 0 rgba(255, 255, 255, 0.1) inset;
     border-radius: 12px;
+}
+
+.btn {
+    border-radius: 6px;
+}
+.btn-primary {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+/* Dashboard Cards */
+.card-header .file-icon {
+
+}
+.card-header .filename {
+
+}
+.card-header .filesize {
+    opacity: 50%;
+}
+.card-body .result {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.card-body .result-icon {
+    font-size: 2rem;
+    margin-right: 8px;
+}
+.card-body .clean .result-icon {
+    color: var(--primary);
+}
+.card-body .detected .result-icon {
+    color: var(--warning);
+}
+.card-body .result-text {
+    font-size: 1.8rem;
+}
+.card-body .description-text {
+
+}
+.card-footer .hash {
+    opacity: 50%;
+}
+.card-footer .time {
+    opacity: 50%;
 }
