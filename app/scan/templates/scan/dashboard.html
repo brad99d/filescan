@@ -48,10 +48,11 @@
           <span>Upload a file</span>
         </div>
         <div class="card-body">
-          <form>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="input-group">
-              <input type="file" class="form-control" id="inputGroupFile">
-              <label class="input-group-text" for="inputGroupFile">Analyse</label>
+              <input type="file" name="file" accept="image/png" class="form-control" id="inputFile" required>
+              <button type="submit" class="btn btn-primary">Analyse</button>
             </div>
           </form>
         </div>
@@ -59,47 +60,37 @@
     </div>
     <div class="col">
       <div class="d-flex flex-column gap-3">
-        <div class="card detail" data-bs-toggle="modal" data-bs-target="#detailsModal">
-          <div class="card-header">
-            <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
-            <span class="filename">file.exe</span>
-            <span class="filesize">64kb</span>
-          </div>
-          <div class="card-body">
-            <div class="result clean">
-              <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
-              <span class="result-text">Clean</span>
+        {% if prediction %}
+          <div class="card detail" data-bs-toggle="modal" data-bs-target="#detailsModal">
+            <div class="card-header">
+              <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
+              <span class="filename">{{ filename }}</span>
+              <span class="filesize">{{ filesize }}</span>
             </div>
-            <div class="description">
-              <span class="description-text">Malicious code was not detected, this file is safe to open.</span>
+            <div class="card-body">
+              {% if prediction == 'Other' %}
+                <div class="result clean">
+                  <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
+                  <span class="result-text">Clean</span>
+                </div>
+                <div class="description">
+                  <span class="description-text">Malicious code was not detected, this file is safe to open.</span>
+                </div>
+              {% else %}
+                <div class="result detected">
+                  <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                  <span class="result-text">Detected</span>
+                </div>
+                <div class="description">
+                  <span class="description-text">Malicious code was detected, proceed with caution.</span>
+                </div>
+              {% endif %}
             </div>
-          </div>
-          <div class="card-footer">
-            <span class="hash">e10adc3949ba59abbe56e057f20f883e</span>
-            <span class="time">10s</span>
-          </div>
-        </div>
-        <!-- warning -->
-        <div class="card detail" data-bs-toggle="modal" data-bs-target="#detailsModal">
-          <div class="card-header">
-            <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
-            <span class="filename">file.exe</span>
-            <span class="filesize">64kb</span>
-          </div>
-          <div class="card-body">
-            <div class="result detected">
-              <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
-              <span class="result-text">Detected</span>
-            </div>
-            <div class="description">
-              <span class="description-text">Malicious code was detected, proceed with caution.</span>
+            <div class="card-footer">
+              <span class="hash">{{ hash }}</span>
             </div>
           </div>
-          <div class="card-footer">
-            <span class="hash">e10adc3949ba59abbe56e057f20f883e</span>
-            <span class="time">10s</span>
-          </div>
-        </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -115,73 +106,63 @@
 <div class="modal fade" id="detailsModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
     <div class="modal-content detail">
-      <div class="modal-header flex-column align-items-start">
-        <div class="result detected">
-          <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
-          <span class="result-text">Detected</span>
+      {% if prediction %}
+        <div class="modal-header flex-column align-items-start">
+          {% if prediction == 'Other' %}
+            <div class="result clean">
+              <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
+              <span class="result-text">Clean</span>
+            </div>
+            <div class="description">
+              <span class="description-text">Malicious code was not detected, this file is safe to open.</span>
+            </div>
+          {% else %}
+            <div class="result detected">
+              <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
+              <span class="result-text">Detected</span>
+            </div>
+            <div class="description">
+              <span class="description-text">Malicious code was detected, proceed with caution.</span>
+            </div>
+          {% endif %}
         </div>
-        <div class="description">
-          <span class="description-text">Malicious code was detected, proceed with caution.</span>
-        </div>
-      </div>
-      <div class="modal-body d-flex flex-column gap-3">
-        <div class="card">
-          <div class="card-header">File Details</div>
-          <div class="card-body">
-            <div class="d-flex gap-3 align-items-center">
-              <div class="bin">
-                <img class="bin-img" src="../../../static/images/bin_placeholder.png">
+        <div class="modal-body d-flex flex-column gap-3">
+          <div class="card">
+            <div class="card-header">File Details</div>
+            <div class="card-body">
+              <div class="d-flex gap-3 align-items-center">
+                <div class="bin">
+                  <img class="bin-img" src="{{ img_url }}">
+                </div>
+                <div class="file-stats">
+                  <div>
+                    <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
+                    <span class="filename">{{ filename }}</span>
+                  </div>
+                  <div>
+                    Filesize: {{ filesize }}
+                  </div>
+                  <div>
+                    md5: {{ hash }}
+                  </div>
+                </div>
               </div>
-              <div class="file-stats">
-                <div>
-                  <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
-                  <span class="filename">file.exe</span>
-                </div>
-                <div>
-                  Filesize: 64kb
-                </div>
-                <div>
-                  md5: e10adc3949ba59abbe56e057f20f883e
-                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">Analysis Results</div>
+            <div class="card-body">
+              <div>
+                {{ results }}
               </div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header">Malware Identification</div>
-          <div class="card-body">
-            <div>
-              Yes, this file contains malware.
-            </div>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link text-danger">Delete</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-        <div class="card">
-          <div class="card-header">Malware Classification</div>
-          <div class="card-body">
-            <div>
-              This file is a Trojan (abc.de).
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">Malware Prediction</div>
-          <div class="card-body">
-            <div>
-              This file will infect.
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">Analysis Statistics</div>
-          <div class="card-body">
-            10s
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-link text-danger">Delete</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
+      {% endif %}
     </div>
   </div>
 </div>
