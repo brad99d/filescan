@@ -117,3 +117,11 @@ img.bin-img {
     background: linear-gradient(180deg, #80AAFF 0%, #B8C7E5 100%);
     box-shadow: 0 2px 20px -10px rgba(0, 0, 0, 0.4);
 }
+
+.prediction-main {
+    background-color: #80AAFF;
+}
+
+.prediction-secondary {
+    background-color: #B8C7E5;
+}

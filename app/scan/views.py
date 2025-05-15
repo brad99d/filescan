@@ -65,12 +65,14 @@ def dashboard(request):
 
         model_result = run_model(img_bytes)
 
+        results = [(name, round(float(prob) * 100, 2)) for name, prob in model_result['results']]
+
         return render(request, 'scan/dashboard.html', {
             'filename': filename,
             'hash': file_hash,
             'filesize': filesize,
             'prediction': model_result['summary'],
             'img_url': img_data_url,
-            'results': model_result['results']
+            'results': results
         })
     return render(request, 'scan/dashboard.html')
