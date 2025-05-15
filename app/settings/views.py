@@ -3,6 +3,6 @@ from django.http import HttpResponse
 from django.template import loader
 
 # Create your views here.
-def dashboard(request):
-    template = loader.get_template('scan/dashboard.html')
+def profile(request):
+    template = loader.get_template('settings/profile.html')
     return HttpResponse(template.render({}, request))
