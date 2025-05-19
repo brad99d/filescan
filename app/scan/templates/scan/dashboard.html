@@ -153,10 +153,28 @@
             </div>
           </div>
           <div class="card">
-            <div class="card-header">Analysis Results</div>
+            <div class="card-header">Malware Identification</div>
             <div class="card-body">
               <div class="d-flex gap-2 flex-column">
-                {% for name, prob in results %}
+                {% for name, prob in category_results %}
+                  <div class="position-relative" style="height: 32px;">
+                    <div class="progress" style="height: 100%;">
+                      <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>
+                    </div>
+                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
+                      <span class="text-black text-truncate">{{ name }}</span>
+                      <span class="text-black">{{ prob }}%</span>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">Malware Classification</div>
+            <div class="card-body">
+              <div class="d-flex gap-2 flex-column">
+                {% for name, prob in family_results %}
                   <div class="position-relative" style="height: 32px;">
                     <div class="progress" style="height: 100%;">
                       <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>

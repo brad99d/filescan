@@ -1,14 +1,21 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-class File(models.Model):
+def classification_result_default():
+    return {"family": "prediction"}
+
+class Result(models.Model):
+    # user
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='results')
+    created_at = models.DateTimeField(auto_now_add=True)
+    # uploaded file
     filename = models.CharField(max_length=255)
     filesize = models.BigIntegerField()
-    filetype = models.CharField(max_length=255)
-    md5_hash = models.CharField(max_length=255)
-    binary_image = models.FileField(upload_to='files')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-class Analysis(models.Model):
-    result_classes = models.CharField(max_length=255)
-    result_statistics = models.CharField(max_length=255)
+    file_hash = models.CharField(max_length=255)
+    bin_image = models.FileField(upload_to='images/')
+    # classification results
+    classification_results = models.JSONField(default=classification_result_default)
+    # string representation
+    def __str__(self):
+        return self.filename
