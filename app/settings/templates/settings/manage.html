@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FileScan | Profile</title>
+  <title>FileScan | Manage</title>
   <!-- Metadata -->
   <meta name="theme-color" content="#FFFFFF">
   <!-- Bootstrap CSS -->
@@ -45,39 +45,18 @@
   <h1 class="mb-5">Hi, {{ user.username }}</h1>
   <div class="row g-3">
     <div class="col-4 sidebar">
-      <a href="{% url 'profile' %}" class="active">Account Details</a>
-      {% if user.is_staff %}
-      <a href="{% url 'manage' %}">Administration</a>
-      {% endif %}
+      <a href="{% url 'profile' %}">Account Details</a>
+      <a href="{% url 'manage' %}" class="active">Administration</a>
     </div>
     <div class="col">
       <div class="d-flex flex-column gap-3">
+        {% for user in users %}
         <div class="card">
           <div class="card-body m-2">
-            <form method="POST" action="#">
-              <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name">
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" id="email">
-              </div>
-              <div class="d-flex flex-fill justify-content-between gap-3 mb-3">
-                <div class="w-100">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control" name="password" id="password">
-                </div>
-                <div class="w-100">
-                  <label for="confirm-password" class="form-label">Confirm Password</label>
-                  <input type="password" class="form-control" name="confirm-password" id="confirm-password">
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary w-100 mt-3">Update Details</button>
-              <a href="../../../accounts/templates/accounts/sign-in.html" class="btn btn-link w-100 mt-3 text-danger">Delete Account</a>
-            </form>
+            {{ user.username }} {{ user.is_staff }}
           </div>
         </div>
+        {% endfor %}
       </div>
     </div>
   </div>
