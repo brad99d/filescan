@@ -7,6 +7,7 @@ import io
 from PIL import Image
 import keras
 import hashlib
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -52,6 +53,7 @@ def shorten_filename(filename, max_length=30):
     short_name = f"{name[:15]}...{name[-10:]}.{ext}" if ext else f"{filename[:max_length-3]}..."
     return short_name
 
+@login_required()
 def dashboard(request):
     if request.method == 'POST' and request.FILES.get('file'):
         file = request.FILES['file']

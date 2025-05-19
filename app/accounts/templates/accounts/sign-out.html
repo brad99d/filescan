@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FileScan | Sign-in</title>
+  <title>FileScan | Sign-out</title>
   <!-- Metadata -->
   <meta name="theme-color" content="#FFFFFF">
   <!-- Bootstrap CSS -->
@@ -26,7 +26,7 @@
             <a class="nav-link" href="{% url 'home' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="{% url 'sign-in' %}">Sign in</a>
+            <a class="nav-link" href="{% url 'sign-in' %}">Sign in</a>
           </li>
           <li class="nav-item ms-2">
             <a class="btn btn-primary" href="{% url 'sign-up' %}">Get Started</a>
@@ -40,20 +40,10 @@
 <div class="container px-2" style="flex-grow: 1; display: flex; flex-direction: column;">
   <div class="row g-3 d-flex align-items-center" style="flex-grow: 1;">
     <div class="col d-flex flex-column gap-2">
-      <h1 class="mb-3">Sign in.</h1>
-      <p class="lead">Sign into your FileScan account to start analysing files.</p>
+      <h1 class="mb-3">You have been signed out.</h1>
+      <p class="lead">Thanks for using FileScan.</p>
     </div>
     <div class="col">
-      <div class="card">
-        <div class="card-body m-2">
-          <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary w-100 mt-3">Sign in</button>
-            <a href="{% url 'sign-up' %}" class="btn btn-link w-100 mt-3">Don't have an account?</a>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 </div>
