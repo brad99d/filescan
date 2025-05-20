@@ -174,3 +174,23 @@ img.bin-img {
 .prediction-secondary {
     background-color: #B8C7E5;
 }
+
+
+.usercard .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.usercard .counter {
+    border-radius: 999em;
+    background-color: black;
+    color: white;
+    padding: 2px 12px;
+    box-sizing: border-box;
+}
+.usercard .name {
+    font-weight: bold;
+}
+.usercard .admin {
+    opacity: 50%;
+}
