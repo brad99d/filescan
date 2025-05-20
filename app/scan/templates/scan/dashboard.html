@@ -63,37 +63,27 @@
     </div>
     <div class="col">
       <div class="d-flex flex-column gap-3">
-        {% if prediction %}
-          <div class="card detail" data-bs-toggle="modal" data-bs-target="#detailsModal">
+        {% for result in user_results %}
+          <div class="card detail" data-bs-toggle="modal" data-bs-target="#details-{{ result.id }}">
             <div class="card-header">
               <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
-              <span class="filename">{{ filename }}</span>
-              <span class="filesize">{{ filesize }}</span>
+              <span class="filename">{{ result.filename }}</span>
+              <span class="filesize">{{ result.filesize }}</span>
             </div>
             <div class="card-body">
-              {% if prediction == 'Other' %}
-                <div class="result clean">
-                  <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
-                  <span class="result-text">Clean</span>
-                </div>
-                <div class="description">
-                  <span class="description-text">Malicious code was not detected, this file is safe to open.</span>
-                </div>
-              {% else %}
                 <div class="result detected">
                   <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
-                  <span class="result-text">Detected</span>
+                  <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
                 </div>
                 <div class="description">
                   <span class="description-text">Malicious code was detected, proceed with caution.</span>
                 </div>
-              {% endif %}
             </div>
             <div class="card-footer">
-              <span class="hash">{{ hash }}</span>
+              <span class="hash">{{ result.file_hash }}</span>
             </div>
           </div>
-        {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -106,28 +96,18 @@
 </div>
 
 <!-- Details Modal -->
-<div class="modal fade" id="detailsModal" tabindex="-1">
+{% for result in user_results %}
+<div class="modal fade" id="details-{{ result.id }}" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
     <div class="modal-content detail">
-      {% if prediction %}
         <div class="modal-header flex-column align-items-start">
-          {% if prediction == 'Other' %}
-            <div class="result clean">
-              <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
-              <span class="result-text">Clean</span>
-            </div>
-            <div class="description">
-              <span class="description-text">Malicious code was not detected, this file is safe to open.</span>
-            </div>
-          {% else %}
             <div class="result detected">
               <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
-              <span class="result-text">Detected</span>
+              <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
             </div>
             <div class="description">
               <span class="description-text">Malicious code was detected, proceed with caution.</span>
             </div>
-          {% endif %}
         </div>
         <div class="modal-body d-flex flex-column gap-3">
           <div class="card">
@@ -135,18 +115,18 @@
             <div class="card-body">
               <div class="d-flex gap-3 align-items-center">
                 <div class="bin">
-                  <img class="bin-img" src="{{ img_url }}">
+                  <img class="bin-img" src="{{ result.img_base64 }}">
                 </div>
                 <div class="file-stats">
                   <div>
                     <span class="file-icon"><i class="bi bi-file-earmark-fill"></i></span>
-                    <span class="filename">{{ filename }}</span>
+                    <span class="filename">{{ result.filename }}</span>
                   </div>
                   <div>
-                    Filesize: {{ filesize }}
+                    Filesize: {{ result.filesize }}
                   </div>
                   <div>
-                    md5: {{ hash }}
+                    md5: {{ result.file_hash }}
                   </div>
                 </div>
               </div>
@@ -156,7 +136,7 @@
             <div class="card-header">Malware Identification</div>
             <div class="card-body">
               <div class="d-flex gap-2 flex-column">
-                {% for name, prob in category_results %}
+                {% for name, prob in result.category_results %}
                   <div class="position-relative" style="height: 32px;">
                     <div class="progress" style="height: 100%;">
                       <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>
@@ -174,7 +154,7 @@
             <div class="card-header">Malware Classification</div>
             <div class="card-body">
               <div class="d-flex gap-2 flex-column">
-                {% for name, prob in family_results %}
+                {% for name, prob in result.family_results %}
                   <div class="position-relative" style="height: 32px;">
                     <div class="progress" style="height: 100%;">
                       <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>
@@ -193,10 +173,10 @@
           <button type="button" class="btn btn-link text-danger">Delete</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-      {% endif %}
     </div>
   </div>
 </div>
+{% endfor %}
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>

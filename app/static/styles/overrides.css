@@ -83,6 +83,10 @@ input[type=text], input[type=password], input[type=email], textarea {
 .detail .result-text {
     font-size: 1.8rem;
 }
+.detail .result-text .family {
+    opacity: 50%;
+    font-weight: 200;
+}
 .detail .description-text {
 
 }
