@@ -118,9 +118,31 @@
           {% endfor %}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-link">Make Admin</button>
+          <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#confirm-{{ user.id }}">{% if user.is_staff %}Demote{% else %}Promote{% endif %}</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirm-{{ user.id }}" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">{% if user.is_staff %}Demote{% else %}Promote{% endif %} {{ user.username }}</div>
+      <div class="modal-body">Are you sure?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#details-{{ user.id }}">Cancel</button>
+        {% if user.is_staff %}
+          <form method="post" action="{% url 'demote' user.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Demote</button>
+          </form>
+        {% else %}
+          <form method="post" action="{% url 'promote' user.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Promote</button>
+          </form>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>

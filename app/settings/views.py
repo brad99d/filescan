@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -47,6 +47,7 @@ def profile(request):
     })
 
 @user_passes_test(lambda u: u.is_staff)
+@login_required()
 def admin_view(request):
     # get all results for every user
     users = User.objects.annotate(
@@ -93,3 +94,19 @@ def admin_view(request):
     return render(request, 'settings/manage.html', {
         'users': processed_users
     })
+
+@user_passes_test(lambda u: u.is_staff)
+@login_required()
+def promote(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_staff = True
+    user.save()
+    return redirect('manage')
+
+@user_passes_test(lambda u: u.is_staff)
+@login_required()
+def demote(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_staff = False
+    user.save()
+    return redirect('manage')
