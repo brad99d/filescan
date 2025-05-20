@@ -75,6 +75,8 @@ def dashboard(request):
         category_results = scanner.get_category_results(result.model_result)
         category_summary = scanner.summarise_results(category_results)
         category_summary_formatted = [(name, round(float(prob) * 100, 2)) for name, prob in category_summary]
+        # get behaviour details
+        behaviour_summary = scanner.get_behaviour_summary(family_summary[0][0])
         # format the results for the template
         processed_results.append({
             'id': result.id,
@@ -88,6 +90,7 @@ def dashboard(request):
             'family_results': family_summary_formatted,
             'top_category': category_summary[0][0],
             'category_results': category_summary_formatted,
+            'behaviour_summary': behaviour_summary,
         })
     return render(request, 'scan/dashboard.html', {
         'user_results': processed_results,

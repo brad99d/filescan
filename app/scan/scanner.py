@@ -53,3 +53,6 @@ def summarise_results(results, threshold=0.0001, max_results=4):
 
 def sort_results(results):
     return sorted(results.items(), key=lambda x: x[1], reverse=True)
+
+def get_behaviour_summary(family):
+    return malware_dictionary.reference.get(family, {}).get('summary', 'Malicious code was detected, proceed with caution.')
