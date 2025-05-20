@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from . import scanner
 from . import malware_dictionary
 import numpy as np
+from django.shortcuts import get_object_or_404, redirect
 
 # Create your views here.
 def format_file_size(size_bytes):
@@ -95,3 +96,13 @@ def dashboard(request):
     return render(request, 'scan/dashboard.html', {
         'user_results': processed_results,
     })
+
+@login_required()
+def delete_result(request, result_id):
+    result = get_object_or_404(AnalysisResult, id=result_id)
+    # make sure the user owns the result
+    if request.user != result.user:
+        return redirect('dashboard')
+    if request.method == 'POST':
+        result.delete()
+    return redirect('dashboard')

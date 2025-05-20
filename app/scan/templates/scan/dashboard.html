@@ -193,9 +193,24 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-link text-danger">Delete</button>
+          <button type="button" class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#delete-{{ result.id }}">Delete</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delete-{{ result.id }}" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">Delete Result</div>
+      <div class="modal-body">Are you sure?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#details-{{ result.id }}">Cancel</button>
+        <form method="post" action="{% url 'delete_result' result.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
