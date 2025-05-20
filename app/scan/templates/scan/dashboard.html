@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div class="col">
+    <div class="col mh-100">
       <div class="d-flex flex-column gap-3">
         {% for result in user_results %}
           <div class="card detail" data-bs-toggle="modal" data-bs-target="#details-{{ result.id }}">
@@ -91,6 +91,15 @@
           </div>
         {% endfor %}
       </div>
+      {% if not user_results %}
+      <div class="empty-container">
+        <div class="card empty">
+          <div class="card-body empty">
+            <span>Upload a file to get started</span>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </div>
