@@ -1,0 +1,196 @@
+:root {
+    --primary: #0D5EFF;
+    --warning: #E2A50D;
+    --secondary: #1F4799;
+    --tertiary: #80AAFF;
+    /* glass border */
+    --glass-border: rgb(200, 200, 200);
+}
+html, body {
+    padding: 0;
+    margin: 0;
+}
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+body.landing {
+    background-image: url('../images/background-1.png');
+}
+body.app {
+    background-image: url('../images/background-2.png');
+    background-size: 100%;
+}
+
+.navbar-brand {
+    font-weight: 900;
+    font-style: italic;
+}
+
+h1 {
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.0;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px var(--glass-border) solid;
+    backdrop-filter: blur(12px);
+    box-shadow:
+            0 2px 20px -10px rgba(0, 0, 0, 0.4),
+            0 -2px 2px 0 rgba(0, 0, 0, 0.1) inset,
+            0 2px 2px 0 rgba(255, 255, 255, 0.1) inset;
+    border-radius: 12px;
+}
+input[type=text], input[type=password], input[type=email], textarea {
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1) inset;
+}
+
+.btn {
+    border-radius: 6px;
+}
+.btn-primary {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+}
+.btn-primary[disabled] {
+    filter: grayscale(100%);
+}
+
+/* Dashboard Cards */
+.empty-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.card.empty {
+    border-radius: 999em;
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.card-body.empty {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.upload-box {
+    aspect-ratio: 4 / 3;
+    box-sizing: border-box;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.1) inset;
+    background-color: var(--bs-card-cap-bg);
+    border-radius: 6px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+.upload-box.dragover {
+    background-color: var(--tertiary);
+}
+.upload-box i {
+    font-size: 3rem;
+}
+
+.detail .file-icon {
+
+}
+.detail .filename {
+
+}
+.detail .filesize {
+    opacity: 50%;
+}
+.detail .result {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.detail .result-icon {
+    font-size: 2rem;
+    margin-right: 8px;
+}
+.detail .clean .result-icon {
+    color: var(--primary);
+}
+.detail .detected .result-icon {
+    color: var(--warning);
+}
+.detail .result-text {
+    font-size: 1.8rem;
+}
+.detail .result-text .family {
+    opacity: 50%;
+    font-weight: 200;
+}
+.detail .description-text {
+
+}
+.detail .hash {
+    opacity: 50%;
+}
+.detail .time {
+    opacity: 50%;
+}
+img.bin-img {
+    image-rendering: pixelated;
+    aspect-ratio: 1/1;
+    width: 100px;
+}
+
+/* Profile Page */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.sidebar a {
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    color: black;
+    text-decoration: none;
+    border-radius: 4px;
+}
+.sidebar a.active {
+    border: 1px solid var(--secondary);
+    background: linear-gradient(180deg, #80AAFF 0%, #B8C7E5 100%);
+    box-shadow: 0 2px 20px -10px rgba(0, 0, 0, 0.4);
+}
+
+.prediction-main {
+    background-color: var(--tertiary);
+}
+
+.prediction-secondary {
+    background-color: #B8C7E5;
+}
+
+
+.usercard .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.usercard .counter {
+    border-radius: 999em;
+    background-color: black;
+    color: white;
+    padding: 2px 12px;
+    box-sizing: border-box;
+}
+.usercard .name {
+    font-weight: bold;
+}
+.usercard .admin {
+    opacity: 50%;
+}
