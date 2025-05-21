@@ -5,10 +5,9 @@ from collections import defaultdict
 import numpy as np
 from . import malware_dictionary
 
-# Model Logic
 def run_model(image_bytes):
     image_size = (128, 8)
-    model = keras.saving.load_model('scan/models/classification_model_5.keras')
+    model = keras.saving.load_model('scan/models/malevis_model_5.keras')
 
     image_io = io.BytesIO(image_bytes)
     img = keras.utils.load_img(image_io, target_size=image_size)
@@ -19,7 +18,12 @@ def run_model(image_bytes):
     probabilities = keras.ops.softmax(predictions[0]).numpy()
 
     # family names
-    class_names = ['Adposhel', 'Agent', 'Allaple', 'Amonetize', 'Androm', 'Autorun', 'BrowseFox', 'Dinwod', 'Elex', 'Expiro', 'Fasong', 'HackKMS', 'Hlux', 'Injector', 'InstallCore', 'MultiPlug', 'Neoreklami', 'Neshta', 'Other', 'Regrun', 'Sality', 'Snarasite', 'Stantinko', 'VBA', 'VBKrypt', 'Vilsel']
+    class_names = ['Adposhel', 'Agent', 'Allaple', 'Amonetize', 'Androm',
+                   'Autorun', 'BrowseFox', 'Dinwod', 'Elex', 'Expiro',
+                   'Fasong', 'HackKMS', 'Hlux', 'Injector', 'InstallCore',
+                   'MultiPlug', 'Neoreklami', 'Neshta', 'Other', 'Regrun',
+                   'Sality', 'Snarasite', 'Stantinko', 'VBA', 'VBKrypt',
+                   'Vilsel']
 
     return list(zip(class_names, probabilities))
 
