@@ -82,7 +82,7 @@
                   <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
                 </div>
                 <div class="description">
-                  <span class="description-text">{{ result.behaviour_summary }}</span>
+                  <span class="description-text">{{ result.summary }}</span>
                 </div>
             </div>
             <div class="card-footer">
@@ -121,7 +121,7 @@
               <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
             </div>
             <div class="description">
-              <span class="description-text">{{ result.behaviour_summary }}</span>
+              <span class="description-text">{{ result.summary }}</span>
             </div>
         </div>
         <div class="modal-body d-flex flex-column gap-3">
@@ -187,7 +187,7 @@
             <div class="card-header">Malware Prediction</div>
             <div class="card-body">
               <div class="d-flex gap-2 flex-column">
-                {{ result.behaviour_summary }}
+                {{ result.behaviour }}
               </div>
             </div>
           </div>
