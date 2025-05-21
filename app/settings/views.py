@@ -68,7 +68,8 @@ def admin_view(request):
             category_summary = scanner.summarise_results(category_results)
             category_summary_formatted = [(name, round(float(prob) * 100, 2)) for name, prob in category_summary]
             # get behaviour details
-            behaviour_summary = scanner.get_behaviour_summary(family_summary[0][0])
+            summary = scanner.get_summary(family_summary[0][0])
+            behaviour = scanner.get_behaviour(family_summary[0][0])
             # format the results for the template
             processed_results.append({
                 'id': result.id,
@@ -82,7 +83,8 @@ def admin_view(request):
                 'family_results': family_summary_formatted,
                 'top_category': category_summary[0][0],
                 'category_results': category_summary_formatted,
-                'behaviour_summary': behaviour_summary,
+                'summary': summary,
+                'behaviour': behaviour,
             })
         processed_users.append({
             'id': user.id,
