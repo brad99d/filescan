@@ -173,12 +173,19 @@
               <div class="d-flex gap-2 flex-column">
                 <div class="position-relative" style="height: 32px;">
                   <div class="progress" style="height: 100%;">
-                    <div class="progress-bar prediction-main" style="width: {{ result.identity_result }}%;"></div>
+                    <div class="progress-bar" style="width: 100%; background-color: {% if result.is_benign %}var(--primary){% else %}var(--warning){% endif %};"></div>
                   </div>
-                  <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
-                    <span class="text-black text-truncate">{% if result.is_benign %}Benign{% else %}Malicious{% endif %}</span>
-                    <span class="text-black">{{ result.identity_result }}%</span>
-                  </div>
+                  {% if result.is_benign %}
+                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
+                      <span class="text-white text-truncate"><i class="bi bi-check-circle-fill"></i> Clean</span>
+                      <span class="text-white">{{ result.identity_result }}%</span>
+                    </div>
+                  {% else %}
+                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
+                      <span class="text-black text-truncate"><i class="bi bi-exclamation-triangle-fill"></i> Malicious</span>
+                      <span class="text-black">{{ result.identity_result }}%</span>
+                    </div>
+                  {% endif %}
                 </div>
               </div>
             </div>
