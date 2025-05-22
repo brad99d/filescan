@@ -99,6 +99,15 @@
                 <span class="filesize">{{ result.filesize }}</span>
               </div>
               <div class="card-body">
+                {% if result.is_benign %}
+                  <div class="result clean">
+                    <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
+                    <span class="result-text">Clean</span>
+                  </div>
+                  <div class="description">
+                    <span class="description-text">No malware was detected.</span>
+                  </div>
+                {% else %}
                   <div class="result detected">
                     <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
                     <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
@@ -106,6 +115,7 @@
                   <div class="description">
                     <span class="description-text">{{ result.summary }}</span>
                   </div>
+                {% endif %}
               </div>
               <div class="card-footer">
                 <span class="hash">{{ result.file_hash }}</span>

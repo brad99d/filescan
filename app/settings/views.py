@@ -9,7 +9,7 @@ from .forms import UsernameUpdateForm
 from django.db.models import Count, Prefetch
 from scan.models import AnalysisResult
 from scan import scanner
-from scan.views import shorten_filename, format_file_size
+from scan.views import shorten_filename, format_file_size, process_results
 
 # Create your views here.
 @login_required()
@@ -58,34 +58,7 @@ def admin_view(request):
     # process the data
     processed_users = []
     for user in users:
-        processed_results = []
-        for result in user.analysis_results.all():
-            # summarise family results
-            family_summary = scanner.summarise_results(result.model_result)
-            family_summary_formatted = [(name, round(float(prob) * 100, 2)) for name, prob in family_summary]
-            # get and summarise category results
-            category_results = scanner.get_category_results(result.model_result)
-            category_summary = scanner.summarise_results(category_results)
-            category_summary_formatted = [(name, round(float(prob) * 100, 2)) for name, prob in category_summary]
-            # get behaviour details
-            summary = scanner.get_summary(family_summary[0][0])
-            behaviour = scanner.get_behaviour(family_summary[0][0])
-            # format the results for the template
-            processed_results.append({
-                'id': result.id,
-                'filename': shorten_filename(result.filename),
-                'filesize': format_file_size(result.filesize),
-                'file_hash': result.file_hash,
-                'img_base64': f"data:image/png;base64,{result.img_base64}",
-                'created_at': result.created_at,
-                # results
-                'top_family': family_summary[0][0],
-                'family_results': family_summary_formatted,
-                'top_category': category_summary[0][0],
-                'category_results': category_summary_formatted,
-                'summary': summary,
-                'behaviour': behaviour,
-            })
+        processed_results = process_results(user.analysis_results.all())
         processed_users.append({
             'id': user.id,
             'username': user.username,

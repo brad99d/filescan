@@ -1,20 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 def model_result_default():
     return {"class": "prediction"}
 
 class AnalysisResult(models.Model):
-    # user
+    # store the user it belongs to
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='analysis_results')
+    # store the date it was created
     created_at = models.DateTimeField(auto_now_add=True)
-    # uploaded file
+    # store the file statistics
     filename = models.CharField(max_length=255)
     filesize = models.BigIntegerField()
     file_hash = models.CharField(max_length=64)
-    img_base64 = models.TextField() # bin_image = models.FileField(upload_to='images/')
-    # model results
+    # store the image representation
+    img_base64 = models.TextField()
+    # store the model results
     model_result = models.JSONField(default=model_result_default)
     # string representation
     def __str__(self):

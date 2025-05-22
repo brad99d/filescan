@@ -3,3 +3,4 @@ numpy~=2.1.3
 keras~=3.9.2
 pillow~=11.2.1
 tensorflow~=2.19.0
+bin2png~=2.1
