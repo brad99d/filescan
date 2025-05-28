@@ -36,11 +36,10 @@ def bin_to_png(file_bytes, size=(300, 300)):
         # load the image from bytes
         image = Image.open(io.BytesIO(png_bytes))
         # resize the image
-        resized_image = image.resize(size, Image.BILINEAR)
+        resized_image = image.resize(size, Image.NEAREST)
         # save the resized image to bytes
         resized_buffer = io.BytesIO()
         resized_image.save(resized_buffer, format='PNG')
-        resized_buffer.write(b'X')
         return resized_buffer.getvalue()
 
 def run_model(image_bytes):
@@ -53,25 +52,20 @@ def run_model(image_bytes):
 
 def identity_model(image_bytes):
     # set the image size as expected by the model
-    image_size = (32, 32)
+    image_size = (128, 8)
     # load the model
-    model = keras.saving.load_model('scan/models/mnist_model_1.keras')
+    model = keras.saving.load_model('scan/models/identity_model_1.keras')
     # read the image
     image_io = io.BytesIO(image_bytes)
-    # convert the image to grayscale as expected by the model
-    image_conv = Image.open(image_io).convert('L')
-    image_conv_io = io.BytesIO()
-    image_conv.save(image_conv_io, format='PNG')
-    image_conv_io.seek(0)
     # run the model using the image
-    img = keras.utils.load_img(image_conv_io, target_size=image_size)
+    img = keras.utils.load_img(image_io, target_size=image_size)
     img_array = keras.utils.img_to_array(img)
     img_array = keras.ops.expand_dims(img_array, 0)
     # store the probabilities
     predictions = model.predict(img_array)
-    probabilities = keras.ops.softmax(predictions[0]).numpy()
-    # return the probabilities
-    return [float(probabilities[0]), float(sum(probabilities[1:]))]
+    score = float(keras.ops.sigmoid(predictions[0][0]))  # as a binary classification model
+    # return the score
+    return [float(1 - score), float(score)]  # [benign score, malicious score]
 
 def category_model(image_bytes):
     # set the image size as expected by the model
@@ -126,8 +120,8 @@ def summarise_results(results, threshold=0.0001, max_results=4):
 # summarise the identity results
 def summarise_identity_results(identity_results, results):
     summary = [None, None]
-    summary[0] = identity_results[0] if identity_results[0] > identity_results[1] else identity_results[1]
-    summary[1] = True if base64.b64decode(results.img_base64)[-1:] == b"X" else False
+    summary[1] = True if identity_results[0] > 70.0 else False
+    summary[0] = identity_results[0] if summary[1] == True else identity_results[1]
     return summary
 
 # sort the results based on probability
