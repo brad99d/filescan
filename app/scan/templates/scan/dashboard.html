@@ -59,7 +59,7 @@
             <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="d-flex flex-column gap-3">
-                <input type="file" name="file" accept="image/png" class="form-control" id="inputFile" required>
+                <input type="file" name="file" class="form-control" id="inputFile" required>
                 <button type="submit" class="btn btn-primary" id="analyseButton" disabled>Analyse</button>
               </div>
             </form>
@@ -77,6 +77,15 @@
               <span class="filesize">{{ result.filesize }}</span>
             </div>
             <div class="card-body">
+              {% if result.is_benign %}
+                <div class="result clean">
+                  <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
+                  <span class="result-text">Clean</span>
+                </div>
+                <div class="description">
+                  <span class="description-text">No malware was detected.</span>
+                </div>
+              {% else %}
                 <div class="result detected">
                   <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
                   <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
@@ -84,6 +93,7 @@
                 <div class="description">
                   <span class="description-text">{{ result.summary }}</span>
                 </div>
+              {% endif %}
             </div>
             <div class="card-footer">
               <span class="hash">{{ result.file_hash }}</span>
@@ -116,13 +126,23 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
     <div class="modal-content detail">
         <div class="modal-header flex-column align-items-start">
-            <div class="result detected">
-              <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
-              <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
-            </div>
-            <div class="description">
-              <span class="description-text">{{ result.summary }}</span>
-            </div>
+            {% if result.is_benign %}
+              <div class="result clean">
+                <span class="result-icon"><i class="bi bi-check-circle-fill"></i></span>
+                <span class="result-text">Clean</span>
+              </div>
+              <div class="description">
+                <span class="description-text">No malware was detected.</span>
+              </div>
+            {% else %}
+              <div class="result detected">
+                <span class="result-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                <span class="result-text">{{ result.top_category }} <span class="family">{{ result.top_family }}</span></span>
+              </div>
+              <div class="description">
+                <span class="description-text">{{ result.summary }}</span>
+              </div>
+            {% endif %}
         </div>
         <div class="modal-body d-flex flex-column gap-3">
           <div class="card">
@@ -130,7 +150,7 @@
             <div class="card-body">
               <div class="d-flex gap-3 align-items-center">
                 <div class="bin">
-                  <img class="bin-img" src="{{ result.img_base64 }}">
+                  <img class="bin-img" src="{{ result.img_base64 }}" style="image-rendering: pixelated">
                 </div>
                 <div class="file-stats">
                   <div>
@@ -151,25 +171,31 @@
             <div class="card-header">Malware Identification</div>
             <div class="card-body">
               <div class="d-flex gap-2 flex-column">
-                {% for name, prob in result.category_results %}
-                  <div class="position-relative" style="height: 32px;">
-                    <div class="progress" style="height: 100%;">
-                      <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>
-                    </div>
-                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
-                      <span class="text-black text-truncate">{{ name }}</span>
-                      <span class="text-black">{{ prob }}%</span>
-                    </div>
+                <div class="position-relative" style="height: 32px;">
+                  <div class="progress" style="height: 100%;">
+                    <div class="progress-bar" style="width: 100%; background-color: {% if result.is_benign %}var(--primary){% else %}var(--warning){% endif %};"></div>
                   </div>
-                {% endfor %}
+                  {% if result.is_benign %}
+                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
+                      <span class="text-white text-truncate"><i class="bi bi-check-circle-fill"></i> Clean</span>
+                      <span class="text-white">{{ result.identity_result }}%</span>
+                    </div>
+                  {% else %}
+                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
+                      <span class="text-black text-truncate"><i class="bi bi-exclamation-triangle-fill"></i> Malicious</span>
+                      <span class="text-black">{{ result.identity_result }}%</span>
+                    </div>
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
+          {% if result.is_benign == False %}
           <div class="card">
             <div class="card-header">Malware Classification</div>
             <div class="card-body">
               <div class="d-flex gap-2 flex-column">
-                {% for name, prob in result.family_results %}
+                {% for name, prob in result.category_results %}
                   <div class="position-relative" style="height: 32px;">
                     <div class="progress" style="height: 100%;">
                       <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>
@@ -186,11 +212,23 @@
           <div class="card">
             <div class="card-header">Malware Prediction</div>
             <div class="card-body">
+              <div class="mb-3">{{ result.behaviour }}</div>
               <div class="d-flex gap-2 flex-column">
-                {{ result.behaviour }}
+                {% for name, prob in result.family_results %}
+                  <div class="position-relative" style="height: 32px;">
+                    <div class="progress" style="height: 100%;">
+                      <div class="progress-bar {% if forloop.first %}prediction-main{% else %}prediction-secondary{% endif %}" style="width: {{ prob }}%;"></div>
+                    </div>
+                    <div class="position-absolute top-0 start-0 end-0 d-flex justify-content-between align-items-center px-2" style="height: 100%;">
+                      <span class="text-black text-truncate">{{ name }}</span>
+                      <span class="text-black">{{ prob }}%</span>
+                    </div>
+                  </div>
+                {% endfor %}
               </div>
             </div>
           </div>
+          {% endif %}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#delete-{{ result.id }}">Delete</button>
