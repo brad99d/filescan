@@ -58,9 +58,9 @@ def identity_model(image_bytes):
     # read the image
     image_io = io.BytesIO(image_bytes)
     # run the model using the image
-    img = keras.utils.load_img(image_io, target_size=image_size)
-    img_array = keras.utils.img_to_array(img)
-    img_array = keras.ops.expand_dims(img_array, 0)
+    img = keras.utils.load_img(image_io, target_size=image_size)  # load the image and resize it
+    img_array = keras.utils.img_to_array(img)  # convert the image to a numeric array
+    img_array = keras.ops.expand_dims(img_array, 0)  # add a batch dimension
     # store the probabilities
     predictions = model.predict(img_array)
     score = float(keras.ops.sigmoid(predictions[0][0]))  # as a binary classification model
@@ -74,12 +74,13 @@ def category_model(image_bytes):
     model = keras.saving.load_model('scan/models/malevis_model_5.keras')
     # read the image
     image_io = io.BytesIO(image_bytes)
-    img = keras.utils.load_img(image_io, target_size=image_size)
-    img_array = keras.utils.img_to_array(img)
-    img_array = keras.ops.expand_dims(img_array, 0)
+    # run the model using the image
+    img = keras.utils.load_img(image_io, target_size=image_size)  # load the image and resize it
+    img_array = keras.utils.img_to_array(img)  # convert the image to a numeric array
+    img_array = keras.ops.expand_dims(img_array, 0)  # add a batch dimension
     # run the model and store the probabilities
     predictions = model.predict(img_array)
-    probabilities = keras.ops.softmax(predictions[0]).numpy()
+    probabilities = keras.ops.softmax(predictions[0]).numpy()  # as a multiclass classification model
     # return the probabilities
     return probabilities
 
